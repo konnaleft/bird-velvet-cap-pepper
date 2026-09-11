@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Polymarket Trend — studio</title>
+  <style>
+    :root {
+      --bg: #070b14;
+      --surface: #101827;
+      --fg: #f3f5f8;
+      --muted: #9aa4b2;
+      --primary: #67e8f9;
+      --border: #243044;
+      --navy: #081228;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: "Segoe UI", system-ui, sans-serif;
+    }
+    main { max-width: 72rem; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+    .kicker { margin: 0 0 .35rem; font-size: .75rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+    h1 { margin: 0; font-size: clamp(1.6rem, 3vw, 2.1rem); font-weight: 600; letter-spacing: -.03em; }
+    .lede { margin: .5rem 0 1.25rem; max-width: 40rem; color: var(--muted); line-height: 1.5; }
+    label { display: block; margin-bottom: .4rem; font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+    .row { display: flex; flex-wrap: wrap; gap: .5rem; }
+    input {
+      flex: 1 1 16rem; min-height: 44px; padding: 0 .9rem;
+      border: 1px solid var(--border); border-radius: 999px;
+      background: var(--surface); color: var(--fg); font-size: .95rem;
+    }
+    input:focus { outline: 2px solid color-mix(in oklab, var(--primary) 70%, white); outline-offset: 2px; }
+    button, .chip {
+      min-height: 44px; padding: 0 .9rem; border: 1px solid var(--border);
+      border-radius: 999px; background: var(--surface); color: var(--fg);
+      font-size: .9rem; font-weight: 500; cursor: pointer;
+    }
+    button.primary { background: var(--fg); color: var(--navy); border-color: var(--fg); }
+    button:disabled { opacity: .55; cursor: not-allowed; }
+    .preview { margin-top: 1.25rem; }
+    .preview img {
+      width: 100%; max-width: 1200px; height: auto; display: block;
+      border-radius: 1.25rem; background: var(--navy);
+    }
+    .actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1.1rem; }
+    .ok { color: var(--primary); }
+    .err { color: #f2b8b5; }
+    p.status { margin: .85rem 0 0; }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="kicker">Share card studio</p>
+    <h1>Polymarket Trend</h1>
+    <p class="lede">Pegá la URL de un mercado. Lo que ves es el PNG listo para X (1200×630 @2x).</p>
+
+    <form id="form">
+      <label for="url">URL de Polymarket</label>
+      <div class="row">
+        <input id="url" name="url" autocomplete="off"
+          value="https://polymarket.com/event/fetterman-leaves-the-democrats-before-the-midterms-20260720221037014/fetterman-leaves-the-democrats-by-december-31-2026"
+          placeholder="https://polymarket.com/event/..." />
+        <button class="primary" type="submit" id="load">Armar card</button>
+      </div>
+    </form>
+
+    <div class="preview">
+      <img id="card" alt="Share card" hidden />
+    </div>
+    <div class="actions">
+      <button class="primary" type="button" id="copy" disabled>Copiar PNG</button>
+      <button type="button" id="download" disabled>Descargar PNG</button>
+    </div>
+    <p class="status" id="status"></p>
+  </main>
+  <script>
+    const form = document.getElementById("form");
+    const input = document.getElementById("url");
+    const loadBtn = document.getElementById("load");
+    const img = document.getElementById("card");
+    const copyBtn = document.getElementById("copy");
+    const downloadBtn = document.getElementById("download");
+    const status = document.getElementById("status");
+    let blob = null;
+    let objectUrl = "";
+
+    function setStatus(text, ok) {
+      status.textContent = text;
+      status.className = "status " + (ok ? "ok" : "err");
+    }
+
+    async function render() {
+      const url = input.value.trim();
+      if (!url) return;
+      loadBtn.disabled = true;
+      copyBtn.disabled = true;
+      downloadBtn.disabled = true;
+      setStatus("Armando card…", true);
+      try {
+        const res = await fetch("/api/png", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ url }),
+        });
+        if (!res.ok) throw new Error(await res.text());
+        blob = await res.blob();
+        if (objectUrl) URL.revokeObjectURL(objectUrl);
+        objectUrl = URL.createObjectURL(blob);
+        img.src = objectUrl;
+        img.hidden = false;
+        copyBtn.disabled = false;
+        downloadBtn.disabled = false;
+        setStatus("Card lista. Copiá o descargá el PNG — es la misma que ves.", true);
+      } catch (err) {
+        setStatus(err.message || "No pude armar la card.", false);
+      } finally {
+        loadBtn.disabled = false;
+      }
+    }
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      render();
+    });
+
+    copyBtn.addEventListener("click", async () => {
+      if (!blob) return;
+      try {
+        await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
+        setStatus("PNG copiado — es la misma card que ves.", true);
+      } catch {
+        setStatus("Este navegador no copia imágenes. Descargá el PNG.", false);
+      }
+    });
+
+    downloadBtn.addEventListener("click", () => {
+      if (!blob) return;
+      const a = document.createElement("a");
+      a.href = objectUrl;
+      a.download = "polymarket-card.png";
+      a.click();
+      setStatus("PNG descargado.", true);
+    });
+  </script>
+</body>
+</html>

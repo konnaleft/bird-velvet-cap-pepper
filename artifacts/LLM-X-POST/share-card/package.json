@@ -1,0 +1,13 @@
+{
+  "name": "share-card",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node src/studio-server.mjs",
+    "studio": "node src/studio-server.mjs",
+    "card": "node src/cli.mjs"
+  },
+  "dependencies": {
+    "playwright": "^1.62.0"
+  }
+}

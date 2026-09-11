@@ -1,0 +1,8 @@
+- Working from GitHub repo https://github.com/konnaleft/polymarket-ui-kit (fork of horn111/polymarket-ui-kit) [2026-09-10]
+- Active work branch: feature/share-card-photo-background (not main) [2026-09-10]
+- Default branch main, HEAD e5a3cada853394ff8b7cd8afe36c50a6b5673a93, MIT, pnpm + turbo monorepo [2026-09-10]
+- Packages: @polymarket-ui-kit/core, react, registry, cli. Apps: demo, docs. Examples: clob-v2-builder-flow, embed-card, media-dashboard, nextjs-app-router, static-og-cards, vite-react [2026-09-10]
+- v0 is read-first: no authenticated trading. Public APIs: Gamma, Data API, CLOB, WS, Combo RFQ [2026-09-10]
+- Local clone target: artifacts/polymarket-ui-kit [2026-09-10]
+- Studio deploy: https://polymarket-ui-kit-demo-five.vercel.app/studio [2026-09-10]
+- Share-card constraints: Gamma JPEGs not cutouts; thumbs small; some markets image null; Satori PNG has no mask-image — use scene full-bleed + linear-gradient only [2026-09-10]

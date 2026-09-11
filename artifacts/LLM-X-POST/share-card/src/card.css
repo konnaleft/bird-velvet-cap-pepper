@@ -1,0 +1,175 @@
+:root {
+  --color-fg: #f3f5f8;
+  --color-muted: #9aa4b2;
+  --color-primary: #67e8f9;
+  --color-navy: #081228;
+  --font-sans: "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  font-family: var(--font-sans);
+  color: var(--color-fg);
+}
+
+.share-card {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 640px 560px;
+  width: 1200px;
+  height: 630px;
+  border-radius: 20px;
+  background: var(--color-navy);
+  color: var(--color-fg);
+  isolation: isolate;
+}
+
+.share-card__art {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.share-card__scene {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+}
+
+.share-card__scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    #081228 0%,
+    rgba(8, 18, 40, 0.28) 12%,
+    rgba(8, 18, 40, 0.06) 28%,
+    transparent 48%
+  );
+}
+
+.share-card__content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  width: 100%;
+  min-height: 0;
+  padding: 36px 28px 28px 40px;
+}
+
+.share-card__brand {
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.share-card__eyebrow {
+  margin: 0.2rem 0 0;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: color-mix(in oklab, var(--color-fg) 70%, transparent);
+}
+
+.share-card__title {
+  margin: 0;
+  font-weight: 650;
+  letter-spacing: -0.035em;
+  line-height: 1.16;
+  overflow: visible;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  font-size: 2.05rem;
+}
+
+.share-card__title.is-md { font-size: 1.55rem; }
+.share-card__title.is-sm { font-size: 1.3rem; }
+
+.share-card__quote {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-top: 0.15rem;
+  flex-shrink: 0;
+}
+
+.share-card__label {
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: color-mix(in oklab, var(--color-fg) 62%, transparent);
+}
+
+.share-card__quote-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+}
+
+.share-card__quote-row strong {
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.share-card__price {
+  font-size: 3.4rem;
+  font-weight: 650;
+  letter-spacing: -0.05em;
+  font-variant-numeric: tabular-nums;
+}
+
+.share-card__bar {
+  height: 6px;
+  max-width: 13.5rem;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--color-fg) 16%, transparent);
+  overflow: hidden;
+}
+
+.share-card__bar > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--color-primary);
+}
+
+.share-card__stats {
+  margin-top: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.4rem;
+  width: max-content;
+  max-width: 100%;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid color-mix(in oklab, var(--color-fg) 14%, transparent);
+  border-radius: 0.75rem;
+  background: color-mix(in oklab, var(--color-navy) 55%, transparent);
+  flex-shrink: 0;
+}
+
+.share-card__stats dt {
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.share-card__stats dd {
+  margin: 0.15rem 0 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}

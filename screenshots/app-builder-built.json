@@ -1,0 +1,38 @@
+{
+  "url": "http://127.0.0.1:8081/",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "Polymarket Trend",
+      "hasCanvas": false,
+      "bodyTextLen": 510,
+      "bodyTextHash": "61a75e126cd57d03ea8800ebf206b3a26dd83a4fdecd92450402ade4b8900f1f",
+      "bodyTextPrefix": "SHARE CARD STUDIO Polymarket Trend Pegá la URL de un mercado. Lo",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-built.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "Polymarket Trend",
+      "hasCanvas": false,
+      "bodyTextLen": 510,
+      "bodyTextHash": "61a75e126cd57d03ea8800ebf206b3a26dd83a4fdecd92450402ade4b8900f1f",
+      "bodyTextPrefix": "SHARE CARD STUDIO Polymarket Trend Pegá la URL de un mercado. Lo",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-built-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/app-builder-built.json",
+  "divergesFromBaseline": false,
+  "baselineReasons": []
+}
