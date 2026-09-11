@@ -476,34 +476,34 @@
 
 .share-card--shot.share-card--square .share-card__content,
 .share-card-shot--square .share-card__content {
-  padding: 52px 36px 48px 52px;
-  gap: 1.05rem;
+  padding: 46px 34px 36px 45px;
+  gap: 1.5rem;
 }
 
 .share-card--shot.share-card--square .share-card__brand,
-.share-card-shot--square .share-card__brand { font-size: 1.45rem; }
+.share-card-shot--square .share-card__brand { font-size: 2rem; }
 .share-card--shot.share-card--square .share-card__eyebrow,
 .share-card--shot.share-card--square .share-card__label,
 .share-card-shot--square .share-card__eyebrow,
-.share-card-shot--square .share-card__label { font-size: 0.95rem; }
+.share-card-shot--square .share-card__label { font-size: 1.45rem; }
 .share-card--shot.share-card--square .share-card__title--lg,
-.share-card-shot--square .share-card__title--lg { font-size: 3.15rem !important; line-height: 1.1; }
+.share-card-shot--square .share-card__title--lg { font-size: 5rem !important; line-height: 1.1; }
 .share-card--shot.share-card--square .share-card__title--md,
-.share-card-shot--square .share-card__title--md { font-size: 2.65rem !important; line-height: 1.12; }
+.share-card-shot--square .share-card__title--md { font-size: 4.3rem !important; line-height: 1.12; }
 .share-card--shot.share-card--square .share-card__title--sm,
-.share-card-shot--square .share-card__title--sm { font-size: 2.2rem !important; line-height: 1.14; }
+.share-card-shot--square .share-card__title--sm { font-size: 3.65rem !important; line-height: 1.14; }
 .share-card--shot.share-card--square .share-card__quote-row strong,
-.share-card-shot--square .share-card__quote-row strong { font-size: 1.7rem; }
+.share-card-shot--square .share-card__quote-row strong { font-size: 2.35rem; }
 .share-card--shot.share-card--square .share-card__price,
-.share-card-shot--square .share-card__price { font-size: 5.4rem; }
+.share-card-shot--square .share-card__price { font-size: 9rem; }
 .share-card--shot.share-card--square .share-card__bar,
-.share-card-shot--square .share-card__bar { height: 10px; max-width: 18rem; }
+.share-card-shot--square .share-card__bar { height: 15px; max-width: 30rem; }
 .share-card--shot.share-card--square .share-card__stats,
-.share-card-shot--square .share-card__stats { padding: 0.95rem 1.2rem; gap: 1.15rem 1.75rem; }
+.share-card-shot--square .share-card__stats { padding: 1.3rem 1.8rem; gap: 2.15rem 3rem; }
 .share-card--shot.share-card--square .share-card__stat-label,
-.share-card-shot--square .share-card__stat-label { font-size: 0.78rem; }
+.share-card-shot--square .share-card__stat-label { font-size: 1.2rem; }
 .share-card--shot.share-card--square .share-card__stat-value,
-.share-card-shot--square .share-card__stat-value { font-size: 1.45rem; }
+.share-card-shot--square .share-card__stat-value { font-size: 2.25rem; }
 
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; }
