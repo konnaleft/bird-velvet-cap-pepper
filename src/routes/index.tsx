@@ -184,7 +184,7 @@ function Studio() {
         }
         aria-hidden="true"
       >
-        <ShareCard market={market} format={format} ref={shotRef} />
+        <ShareCard market={market} format={format} shot ref={shotRef} />
       </div>
 
       <div className="studio__actions">

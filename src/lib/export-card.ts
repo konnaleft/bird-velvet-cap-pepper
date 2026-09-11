@@ -42,6 +42,12 @@ export async function captureShareCard(
       height: `${height}px`,
       transform: "none",
       opacity: "1",
+      left: "0",
+      top: "0",
+      right: "auto",
+      bottom: "auto",
+      margin: "0",
+      position: "relative",
     },
   });
 

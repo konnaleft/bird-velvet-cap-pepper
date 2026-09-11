@@ -24,7 +24,9 @@ Layout canónico (los dos formatos):
 - Texto e odds **a la izquierda**
 - Foto en **panel derecho**, JPEG rectangular, no cutout
 - Degradé suave solo en el borde izquierdo de la foto
-- Precio en **¢**, barra bajo el outcome, Volume y Liquidity juntos
+- Precio en **¢**, barra bajo el outcome
+- **Volume, Liquidity y Comments en UNA sola fila**, caja anclada al borde inferior. Nunca `width: max-content` + `flex-wrap` en esa caja: html-to-image la achica al primer ítem y el PNG recorta Liquidity/Comments.
+
 - Título con wrap; nunca `overflow: hidden` en el h2
 - En cuadrado el panel es 540/540; el título y el ¢ son más grandes porque hay más alto
 
@@ -95,3 +97,5 @@ Tipografía del PNG cuadrado (canvas 1080):
 - UFC título largo: se lee `(Featherweight Main Card)`
 - Milei / Hormuz / inflación: foto a la derecha, ¢ a la izquierda
 - Copiar PNG = la preview del formato elegido
+- Volume + Liquidity (+ Comments si Gamma lo manda) se leen enteros en el PNG 1:1, no cortados abajo
+

@@ -10,8 +10,8 @@ export type CardFormat = "wide" | "square";
 
 export const ShareCard = forwardRef<
   HTMLElement,
-  { market: StudioMarket; format?: CardFormat }
->(function ShareCard({ market, format = "square" }, ref) {
+  { market: StudioMarket; format?: CardFormat; shot?: boolean }
+>(function ShareCard({ market, format = "square", shot = false }, ref) {
   const fill = `${Math.round(market.leading.price * 100)}%`;
 
   return (
@@ -20,6 +20,7 @@ export const ShareCard = forwardRef<
       className={cn(
         "share-card",
         format === "square" && "share-card--square",
+        shot && "share-card--shot",
       )}
     >
       <div className="share-card__content">
@@ -45,22 +46,22 @@ export const ShareCard = forwardRef<
           </div>
         </div>
 
-        <dl className="share-card__stats">
-          <div>
-            <dt>Volume</dt>
-            <dd>{market.volume}</dd>
+        <div className="share-card__stats">
+          <div className="share-card__stat">
+            <span className="share-card__stat-label">Volume</span>
+            <span className="share-card__stat-value">{market.volume}</span>
           </div>
-          <div>
-            <dt>Liquidity</dt>
-            <dd>{market.liquidity}</dd>
+          <div className="share-card__stat">
+            <span className="share-card__stat-label">Liquidity</span>
+            <span className="share-card__stat-value">{market.liquidity}</span>
           </div>
           {market.comments ? (
-            <div>
-              <dt>Comments</dt>
-              <dd>{market.comments}</dd>
+            <div className="share-card__stat">
+              <span className="share-card__stat-label">Comments</span>
+              <span className="share-card__stat-value">{market.comments}</span>
             </div>
           ) : null}
-        </dl>
+        </div>
       </div>
 
       <div className="share-card__art">
