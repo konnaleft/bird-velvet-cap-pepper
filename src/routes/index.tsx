@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { RectangleHorizontal, Square } from "lucide-react";
 import { useRef, useState, type FormEvent } from "react";
 import { ShareCard, type CardFormat } from "@/components/share-card";
 import {
@@ -29,6 +30,8 @@ function Studio() {
   const market =
     live ?? MARKETS.find((item) => item.id === activeId) ?? MARKETS[0];
   const size = CARD_SIZE[format];
+  const formatLabel =
+    format === "square" ? "1:1 recorte de X" : "1.91:1 links / OG";
 
   async function onLoad(event: FormEvent) {
     event.preventDefault();
@@ -65,10 +68,50 @@ function Studio() {
         <p className="studio__kicker">Share card studio</p>
         <h1 className="studio__heading">Polymarket Trend</h1>
         <p className="studio__lede">
-          Pegá la URL de un mercado. Lo que ves es lo que se copia. Por defecto
-          sale cuadrado 1080×1080 — el recorte que usa X al pegar la imagen.
+          Pegá la URL. El PNG sale listo para X. Por defecto es{" "}
+          <strong>cuadrado 1080×1080</strong> — el recorte que usa X al pegar.
         </p>
       </header>
+
+      <section className="studio__format" aria-label="Formato de la card">
+        <p className="studio__label" id="format-label">
+          Formato
+        </p>
+        <div className="studio__format-row" role="group" aria-labelledby="format-label">
+          <button
+            type="button"
+            className={
+              format === "square"
+                ? "studio__format-btn studio__format-btn--on"
+                : "studio__format-btn"
+            }
+            aria-pressed={format === "square"}
+            onClick={() => setFormat("square")}
+          >
+            <Square className="studio__format-icon" aria-hidden="true" />
+            <span className="studio__format-copy">
+              <strong>Cuadrado 1:1</strong>
+              <em>1080×1080 · recorte de X</em>
+            </span>
+          </button>
+          <button
+            type="button"
+            className={
+              format === "wide"
+                ? "studio__format-btn studio__format-btn--on"
+                : "studio__format-btn"
+            }
+            aria-pressed={format === "wide"}
+            onClick={() => setFormat("wide")}
+          >
+            <RectangleHorizontal className="studio__format-icon" aria-hidden="true" />
+            <span className="studio__format-copy">
+              <strong>Horizontal 1.91:1</strong>
+              <em>1200×630 · links / OG</em>
+            </span>
+          </button>
+        </div>
+      </section>
 
       <form className="studio__form" onSubmit={onLoad}>
         <label className="studio__label" htmlFor="market-url">
@@ -88,23 +131,6 @@ function Studio() {
           </button>
         </div>
       </form>
-
-      <nav className="studio__nav" aria-label="Formato">
-        <button
-          type="button"
-          className={format === "square" ? "studio__chip studio__chip--on" : "studio__chip"}
-          onClick={() => setFormat("square")}
-        >
-          Cuadrado 1:1
-        </button>
-        <button
-          type="button"
-          className={format === "wide" ? "studio__chip studio__chip--on" : "studio__chip"}
-          onClick={() => setFormat("wide")}
-        >
-          Horizontal 1.91:1
-        </button>
-      </nav>
 
       <nav className="studio__nav" aria-label="Ejemplos">
         {MARKETS.map((item) => (
@@ -136,13 +162,25 @@ function Studio() {
         ))}
       </nav>
 
-      <div className={format === "square" ? "studio__preview studio__preview--square" : "studio__preview"}>
+      <p className="studio__preview-cap">
+        PNG {size.width}×{size.height} · {formatLabel}
+      </p>
+
+      <div
+        className={
+          format === "square"
+            ? "studio__preview studio__preview--square"
+            : "studio__preview"
+        }
+      >
         <ShareCard market={market} format={format} />
       </div>
 
       <div
         className={
-          format === "square" ? "share-card-shot share-card-shot--square" : "share-card-shot"
+          format === "square"
+            ? "share-card-shot share-card-shot--square"
+            : "share-card-shot"
         }
         aria-hidden="true"
       >

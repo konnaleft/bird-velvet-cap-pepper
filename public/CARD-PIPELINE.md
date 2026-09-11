@@ -8,7 +8,7 @@ Repo de trabajo: https://github.com/konnaleft/bird-velvet-cap-pepper
 
 Pegar una URL de Polymarket → PNG listo para copiar/pegar en X.
 
-Hay **dos formatos**. El default para X es cuadrado:
+Hay **dos formatos**. El default para X es cuadrado. En el studio aparecen como dos botones grandes **arriba de todo** (no chips chicos):
 
 | Formato | Tamaño | Uso |
 |---|---|---|
@@ -16,6 +16,8 @@ Hay **dos formatos**. El default para X es cuadrado:
 | `wide` | 1200×630 | OG / link preview / embed horizontal |
 
 X, al pegar un 1200×630, abre el recortador en cuadrado y se come el título (`t IPO by December`). Por eso el PNG de X sale 1:1 con tipografía grande.
+
+**Si el sitio de Vercel todavía dice “PNG 1200×630” y no muestra Cuadrado/Horizontal:** Production está clavada en un snapshot viejo. `Redeploy` del deploy actual **vuelve a publicar el mismo commit**. Hay que desplegar el `main` más reciente de GitHub, no rearmar el Production viejo.
 
 Layout canónico (los dos formatos):
 
@@ -48,10 +50,9 @@ Si Gamma manda `image: null` → card navy sin foto.
 
 ## Cómo usarlo (producto)
 
-1. Pegar `https://polymarket.com/event/.../...`
-2. Elegir **Cuadrado 1:1** (X) o **Horizontal 1.91:1**
-3. Armar card
-4. **Copiar PNG** o **Descargar PNG** — captura el mismo DOM de la preview a 2× (2160×2160 o 2400×1260)
+1. Elegir **Cuadrado 1:1** (X) o **Horizontal 1.91:1** — botones grandes arriba
+2. Pegar `https://polymarket.com/event/.../...` y Armar card
+3. **Copiar PNG** o **Descargar PNG** — captura el mismo DOM de la preview a 2× (2160×2160 o 2400×1260)
 
 ## Cómo usarlo (agente)
 
@@ -88,6 +89,7 @@ Tipografía del PNG cuadrado (canvas 1080):
 
 ## QA mínimo
 
+- Los dos botones de formato se ven **sin scrollear** (arriba del input)
 - En X compose, el cuadrado no corta el título
 - Fetterman: cara completa a la derecha
 - UFC título largo: se lee `(Featherweight Main Card)`
