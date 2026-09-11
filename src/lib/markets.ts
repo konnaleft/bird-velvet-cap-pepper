@@ -71,7 +71,7 @@ export function formatCents(price: number) {
 }
 
 export function titleSize(question: string) {
-  if (question.length > 88) return "text-xl";
-  if (question.length > 54) return "text-2xl";
-  return "text-3xl";
+  if (question.length > 88) return "share-card__title--sm";
+  if (question.length > 54) return "share-card__title--md";
+  return "share-card__title--lg";
 }

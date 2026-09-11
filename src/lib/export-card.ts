@@ -1,34 +1,45 @@
 import { toBlob } from "html-to-image";
 
+export type CardFormat = "wide" | "square";
+
+export const CARD_SIZE = {
+  wide: { width: 1200, height: 630 },
+  square: { width: 1080, height: 1080 },
+} as const;
+
 function waitForImages(node: HTMLElement) {
   const images = Array.from(node.querySelectorAll("img"));
   return Promise.all(
-    images.map(
-      (img) =>
-        img.complete
-          ? Promise.resolve()
-          : new Promise<void>((resolve) => {
-              img.addEventListener("load", () => resolve(), { once: true });
-              img.addEventListener("error", () => resolve(), { once: true });
-            }),
+    images.map((img) =>
+      img.complete
+        ? Promise.resolve()
+        : new Promise<void>((resolve) => {
+            img.addEventListener("load", () => resolve(), { once: true });
+            img.addEventListener("error", () => resolve(), { once: true });
+          }),
     ),
   );
 }
 
-export async function captureShareCard(node: HTMLElement): Promise<Blob> {
+export async function captureShareCard(
+  node: HTMLElement,
+  format: CardFormat = "square",
+): Promise<Blob> {
   await waitForImages(node);
   await new Promise((resolve) => requestAnimationFrame(() => resolve(null)));
+
+  const { width, height } = CARD_SIZE[format];
 
   const blob = await toBlob(node, {
     cacheBust: true,
     pixelRatio: 2,
     backgroundColor: "#081228",
-    width: 1200,
-    height: 630,
+    width,
+    height,
     skipAutoScale: true,
     style: {
-      width: "1200px",
-      height: "630px",
+      width: `${width}px`,
+      height: `${height}px`,
       transform: "none",
       opacity: "1",
     },
