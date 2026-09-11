@@ -1,7 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useRef, useState, type FormEvent } from "react";
-import { ShareCard } from "@/components/share-card";
-import { captureShareCard, copyPng, downloadPng } from "@/lib/export-card";
+import { ShareCard, type CardFormat } from "@/components/share-card";
+import {
+  CARD_SIZE,
+  captureShareCard,
+  copyPng,
+  downloadPng,
+} from "@/lib/export-card";
 import { loadMarket } from "@/lib/load-market";
 import { MARKETS, type StudioMarket } from "@/lib/markets";
 
@@ -15,6 +20,7 @@ function Studio() {
   const [url, setUrl] = useState(SAMPLE_URL);
   const [activeId, setActiveId] = useState(MARKETS[0].id);
   const [live, setLive] = useState<StudioMarket | null>(null);
+  const [format, setFormat] = useState<CardFormat>("square");
   const [busy, setBusy] = useState(false);
   const [exporting, setExporting] = useState(false);
   const [message, setMessage] = useState("");
@@ -22,6 +28,7 @@ function Studio() {
 
   const market =
     live ?? MARKETS.find((item) => item.id === activeId) ?? MARKETS[0];
+  const size = CARD_SIZE[format];
 
   async function onLoad(event: FormEvent) {
     event.preventDefault();
@@ -46,7 +53,7 @@ function Studio() {
     setExporting(true);
     setError("");
     try {
-      return await captureShareCard(node);
+      return await captureShareCard(node, format);
     } finally {
       setExporting(false);
     }
@@ -58,8 +65,8 @@ function Studio() {
         <p className="studio__kicker">Share card studio</p>
         <h1 className="studio__heading">Polymarket Trend</h1>
         <p className="studio__lede">
-          Pegá la URL de un mercado. Lo que ves es lo que se copia: PNG 1200×630
-          idéntico a la preview.
+          Pegá la URL de un mercado. Lo que ves es lo que se copia. Por defecto
+          sale cuadrado 1080×1080 — el recorte que usa X al pegar la imagen.
         </p>
       </header>
 
@@ -81,6 +88,23 @@ function Studio() {
           </button>
         </div>
       </form>
+
+      <nav className="studio__nav" aria-label="Formato">
+        <button
+          type="button"
+          className={format === "square" ? "studio__chip studio__chip--on" : "studio__chip"}
+          onClick={() => setFormat("square")}
+        >
+          Cuadrado 1:1
+        </button>
+        <button
+          type="button"
+          className={format === "wide" ? "studio__chip studio__chip--on" : "studio__chip"}
+          onClick={() => setFormat("wide")}
+        >
+          Horizontal 1.91:1
+        </button>
+      </nav>
 
       <nav className="studio__nav" aria-label="Ejemplos">
         {MARKETS.map((item) => (
@@ -112,10 +136,17 @@ function Studio() {
         ))}
       </nav>
 
-      <ShareCard market={market} />
+      <div className={format === "square" ? "studio__preview studio__preview--square" : "studio__preview"}>
+        <ShareCard market={market} format={format} />
+      </div>
 
-      <div className="share-card-shot" aria-hidden="true">
-        <ShareCard market={market} ref={shotRef} />
+      <div
+        className={
+          format === "square" ? "share-card-shot share-card-shot--square" : "share-card-shot"
+        }
+        aria-hidden="true"
+      >
+        <ShareCard market={market} format={format} ref={shotRef} />
       </div>
 
       <div className="studio__actions">
@@ -127,7 +158,9 @@ function Studio() {
             try {
               const blob = await exportBlob();
               await copyPng(blob);
-              setMessage("PNG copiado — es la misma card que ves arriba.");
+              setMessage(
+                `PNG ${size.width}×${size.height} copiado — listo para pegar en X.`,
+              );
             } catch (err) {
               setError(err instanceof Error ? err.message : "No pude copiar.");
             }
@@ -142,8 +175,11 @@ function Studio() {
           onClick={async () => {
             try {
               const blob = await exportBlob();
-              await downloadPng(blob, `${market.id}-card.png`);
-              setMessage("PNG descargado — mismo diseño que la preview.");
+              await downloadPng(
+                blob,
+                `${market.id}-${format}-${size.width}.png`,
+              );
+              setMessage(`PNG ${size.width}×${size.height} descargado.`);
             } catch (err) {
               setError(err instanceof Error ? err.message : "No pude descargar.");
             }
