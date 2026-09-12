@@ -212,8 +212,8 @@
   border-color: var(--color-fg);
 }
 
-.studio__preview-scale { width: 100%; overflow: hidden; }
-.studio__preview-scale-inner { transform-origin: top left; }
+.studio__preview { width: 100%; max-width: 48rem; }
+.studio__preview--square { max-width: 36rem; }
 
 .share-card {
   position: relative;
@@ -265,9 +265,10 @@
 .share-card__content {
   position: relative;
   z-index: 2;
-  display: grid;
-  grid-template-rows: auto auto auto auto 1fr;
-  align-items: start;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
   gap: 0.55rem;
   width: 100%;
   height: 100%;
@@ -309,13 +310,19 @@
 
 .share-card__title {
   margin: 0;
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: 46%;
   font-weight: 700;
   letter-spacing: -0.038em;
   line-height: 1.12;
-  overflow: visible;
+  overflow: hidden;
   overflow-wrap: anywhere;
   word-break: break-word;
   text-wrap: pretty;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 7;
 }
 
 .share-card__title--lg { font-size: clamp(1.55rem, 3.4vw, 2.35rem); }
@@ -331,6 +338,7 @@
   gap: 0.35rem;
   margin-top: 0.15rem;
   flex-shrink: 0;
+  min-width: 0;
 }
 
 .share-card__label {
@@ -377,27 +385,30 @@
 }
 
 .share-card__stats {
-  grid-row: 5;
-  align-self: end;
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: max-content;
-  justify-content: start;
-  align-items: end;
-  gap: 1.15rem 1.6rem;
+  position: relative;
+  z-index: 3;
+  flex: 0 0 auto;
+  margin-top: auto;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: flex-end;
+  gap: 1.15rem 1.5rem;
   width: auto;
   max-width: 100%;
-  margin: 0;
-  padding: 0.7rem 0.95rem;
-  border: 1px solid color-mix(in oklab, var(--color-fg) 14%, transparent);
+  margin-left: 0;
+  margin-right: 0;
+  margin-bottom: 0;
+  padding: 0.55rem 0.85rem;
+  border: 1px solid rgba(243, 245, 248, 0.16);
   border-radius: 0.75rem;
-  background: color-mix(in oklab, var(--color-navy) 55%, transparent);
+  background: rgba(8, 18, 40, 0.78);
 }
 
 .share-card__stat {
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
+  display: inline-block;
+  vertical-align: top;
+  margin-right: 1.35rem;
   min-width: 4.25rem;
 }
 
@@ -419,8 +430,28 @@
 
 .share-card--square .share-card__stat-value { font-size: 1.2rem; }
 
+@media (max-width: 720px) {
+  .studio__preview .share-card { min-height: 16.5rem; grid-template-columns: 1.15fr 0.85fr; }
+  .studio__preview .share-card--square { min-height: 0; grid-template-columns: 1fr 1fr; }
+  .studio__preview .share-card__content { padding: 0.75rem 0.65rem 0.7rem 0.8rem; gap: 0.35rem; }
+  .studio__preview .share-card__title--lg,
+  .studio__preview .share-card__title--md,
+  .studio__preview .share-card__title--sm { font-size: 1.05rem !important; line-height: 1.18; }
+  .studio__preview .share-card--square .share-card__title--lg,
+  .studio__preview .share-card--square .share-card__title--md,
+  .studio__preview .share-card--square .share-card__title--sm { font-size: 1.2rem !important; }
+  .studio__preview .share-card__price { font-size: 1.55rem; }
+  .studio__preview .share-card--square .share-card__price { font-size: 1.9rem; }
+  .studio__preview .share-card__stats { gap: 0.75rem 1rem; padding: 0.45rem 0.6rem; }
+  .studio__preview .share-card__stat-value { font-size: 0.9rem; }
+}
+
 .share-card-shot {
-  width: 100%;
+  position: fixed;
+  left: -14000px;
+  top: 0;
+  width: 1200px;
+  height: 630px;
   pointer-events: none;
 }
 
@@ -476,34 +507,45 @@
 
 .share-card--shot.share-card--square .share-card__content,
 .share-card-shot--square .share-card__content {
-  padding: 46px 34px 36px 45px;
-  gap: 1.5rem;
+  padding: 52px 36px 48px 52px;
+  gap: 1.05rem;
 }
 
 .share-card--shot.share-card--square .share-card__brand,
-.share-card-shot--square .share-card__brand { font-size: 2rem; }
+.share-card-shot--square .share-card__brand { font-size: 1.45rem; }
 .share-card--shot.share-card--square .share-card__eyebrow,
 .share-card--shot.share-card--square .share-card__label,
 .share-card-shot--square .share-card__eyebrow,
-.share-card-shot--square .share-card__label { font-size: 1.45rem; }
+.share-card-shot--square .share-card__label { font-size: 0.95rem; }
 .share-card--shot.share-card--square .share-card__title--lg,
-.share-card-shot--square .share-card__title--lg { font-size: 5rem !important; line-height: 1.1; }
+.share-card-shot--square .share-card__title--lg { font-size: 3.15rem !important; line-height: 1.1; }
 .share-card--shot.share-card--square .share-card__title--md,
-.share-card-shot--square .share-card__title--md { font-size: 4.3rem !important; line-height: 1.12; }
+.share-card-shot--square .share-card__title--md { font-size: 2.65rem !important; line-height: 1.12; }
 .share-card--shot.share-card--square .share-card__title--sm,
-.share-card-shot--square .share-card__title--sm { font-size: 3.65rem !important; line-height: 1.14; }
+.share-card-shot--square .share-card__title--sm { font-size: 2.2rem !important; line-height: 1.14; }
 .share-card--shot.share-card--square .share-card__quote-row strong,
-.share-card-shot--square .share-card__quote-row strong { font-size: 2.35rem; }
+.share-card-shot--square .share-card__quote-row strong { font-size: 1.7rem; }
 .share-card--shot.share-card--square .share-card__price,
-.share-card-shot--square .share-card__price { font-size: 9rem; }
+.share-card-shot--square .share-card__price { font-size: 5.4rem; }
 .share-card--shot.share-card--square .share-card__bar,
-.share-card-shot--square .share-card__bar { height: 15px; max-width: 30rem; }
+.share-card-shot--square .share-card__bar { height: 10px; max-width: 18rem; }
 .share-card--shot.share-card--square .share-card__stats,
-.share-card-shot--square .share-card__stats { padding: 1.3rem 1.8rem; gap: 2.15rem 3rem; }
+.share-card-shot--square .share-card__stats {
+  padding: 0.85rem 1.15rem;
+  gap: 1.15rem 1.75rem;
+}
+.share-card--shot .share-card__title,
+.share-card-shot .share-card__title {
+  max-height: 168px;
+}
+.share-card--shot.share-card--square .share-card__title,
+.share-card-shot--square .share-card__title {
+  max-height: 360px;
+}
 .share-card--shot.share-card--square .share-card__stat-label,
-.share-card-shot--square .share-card__stat-label { font-size: 1.2rem; }
+.share-card-shot--square .share-card__stat-label { font-size: 0.78rem; }
 .share-card--shot.share-card--square .share-card__stat-value,
-.share-card-shot--square .share-card__stat-value { font-size: 2.25rem; }
+.share-card-shot--square .share-card__stat-value { font-size: 1.45rem; }
 
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; }

@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { RectangleHorizontal, Square } from "lucide-react";
-import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
+import { useRef, useState, type FormEvent } from "react";
 import { ShareCard, type CardFormat } from "@/components/share-card";
 import {
   CARD_SIZE,
@@ -15,53 +15,6 @@ export const Route = createFileRoute("/")({ component: Studio });
 
 const SAMPLE_URL =
   "https://polymarket.com/event/fetterman-leaves-the-democrats-before-the-midterms-20260720221037014/fetterman-leaves-the-democrats-by-december-31-2026";
-
-// El preview muestra el MISMO nodo a tamaño real (1080 / 1200px) que luego
-// captura Copiar/Descargar PNG, escalado solo visualmente. Así lo que se ve
-// es lo que sale: antes el preview era fluido (clamp+vw en ~576px) y el
-// export un nodo oculto con tamaños fijos, y el texto salía distinto.
-function ScaledPreview({
-  width,
-  height,
-  children,
-}: {
-  width: number;
-  height: number;
-  children: ReactNode;
-}) {
-  const wrapRef = useRef<HTMLDivElement>(null);
-  const [scale, setScale] = useState(1);
-  useEffect(() => {
-    const el = wrapRef.current;
-    if (!el) return;
-    const compute = () => {
-      const w = el.clientWidth;
-      if (w > 0) setScale(Math.min(1, w / width));
-    };
-    compute();
-    const ro = new ResizeObserver(compute);
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, [width]);
-  return (
-    <div
-      ref={wrapRef}
-      className="studio__preview-scale"
-      style={{ height: Math.max(1, Math.round(height * scale)) }}
-    >
-      <div
-        className="studio__preview-scale-inner"
-        style={{
-          width,
-          height,
-          transform: `scale(${scale})`,
-        }}
-      >
-        {children}
-      </div>
-    </div>
-  );
-}
 
 function Studio() {
   const shotRef = useRef<HTMLElement>(null);
@@ -213,17 +166,26 @@ function Studio() {
         PNG {size.width}×{size.height} · {formatLabel}
       </p>
 
-      <ScaledPreview width={size.width} height={size.height}>
-        <div
-          className={
-            format === "square"
-              ? "share-card-shot share-card-shot--square"
-              : "share-card-shot"
-          }
-        >
-          <ShareCard market={market} format={format} shot ref={shotRef} />
-        </div>
-      </ScaledPreview>
+      <div
+        className={
+          format === "square"
+            ? "studio__preview studio__preview--square"
+            : "studio__preview"
+        }
+      >
+        <ShareCard market={market} format={format} />
+      </div>
+
+      <div
+        className={
+          format === "square"
+            ? "share-card-shot share-card-shot--square"
+            : "share-card-shot"
+        }
+        aria-hidden="true"
+      >
+        <ShareCard market={market} format={format} shot ref={shotRef} />
+      </div>
 
       <div className="studio__actions">
         <button
