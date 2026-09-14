@@ -1,6 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { RectangleHorizontal, Square } from "lucide-react";
-import { useRef, useState, type FormEvent } from "react";
+import {
+  useLayoutEffect,
+  useRef,
+  useState,
+  type FormEvent,
+  type ReactNode,
+} from "react";
 import { ShareCard, type CardFormat } from "@/components/share-card";
 import {
   CARD_SIZE,
@@ -15,6 +21,54 @@ export const Route = createFileRoute("/")({ component: Studio });
 
 const SAMPLE_URL =
   "https://polymarket.com/event/fetterman-leaves-the-democrats-before-the-midterms-20260720221037014/fetterman-leaves-the-democrats-by-december-31-2026";
+
+function ScaledStage({
+  format,
+  children,
+}: {
+  format: CardFormat;
+  children: ReactNode;
+}) {
+  const size = CARD_SIZE[format];
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const [scale, setScale] = useState(0.5);
+
+  useLayoutEffect(() => {
+    const el = wrapRef.current;
+    if (!el) return;
+    const sync = () => {
+      const next = el.clientWidth / size.width;
+      setScale(Number.isFinite(next) && next > 0 ? next : 0.5);
+    };
+    sync();
+    const ro = new ResizeObserver(sync);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [size.width]);
+
+  return (
+    <div
+      ref={wrapRef}
+      className={
+        format === "square"
+          ? "studio__stage studio__stage--square"
+          : "studio__stage"
+      }
+      style={{ aspectRatio: `${size.width} / ${size.height}` }}
+    >
+      <div
+        className="studio__stage-inner"
+        style={{
+          width: size.width,
+          height: size.height,
+          transform: `scale(${scale})`,
+        }}
+      >
+        {children}
+      </div>
+    </div>
+  );
+}
 
 function Studio() {
   const shotRef = useRef<HTMLElement>(null);
@@ -166,26 +220,9 @@ function Studio() {
         PNG {size.width}×{size.height} · {formatLabel}
       </p>
 
-      <div
-        className={
-          format === "square"
-            ? "studio__preview studio__preview--square"
-            : "studio__preview"
-        }
-      >
-        <ShareCard market={market} format={format} />
-      </div>
-
-      <div
-        className={
-          format === "square"
-            ? "share-card-shot share-card-shot--square"
-            : "share-card-shot"
-        }
-        aria-hidden="true"
-      >
+      <ScaledStage format={format}>
         <ShareCard market={market} format={format} shot ref={shotRef} />
-      </div>
+      </ScaledStage>
 
       <div className="studio__actions">
         <button

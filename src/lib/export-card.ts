@@ -22,20 +22,12 @@ function waitForImages(node: HTMLElement) {
 }
 
 function parkForCapture(node: HTMLElement) {
-  const wrap = node.closest(".share-card-shot") as HTMLElement | null;
-  if (!wrap) return () => {};
-  const prev = wrap.getAttribute("style");
-  wrap.style.left = "0px";
-  wrap.style.top = "0px";
-  wrap.style.position = "fixed";
-  wrap.style.zIndex = "-1";
-  wrap.style.opacity = "1";
-  wrap.style.pointerEvents = "none";
-  wrap.style.transform = "none";
-  return () => {
-    if (prev == null) wrap.removeAttribute("style");
-    else wrap.setAttribute("style", prev);
-  };
+  const inner =
+    (node.closest(".studio__stage-inner") as HTMLElement | null) ??
+    (node.closest(".share-card-shot") as HTMLElement | null);
+  if (!inner) return () => {};
+  inner.classList.add("is-capturing");
+  return () => inner.classList.remove("is-capturing");
 }
 
 function blobToImage(blob: Blob) {
@@ -130,14 +122,16 @@ export async function captureShareCard(
     const ctx = canvas.getContext("2d");
     if (!ctx) return cardBlob;
     ctx.drawImage(cardImg, 0, 0, canvas.width, canvas.height);
-    const x = (statsRect.left - cardRect.left) * pixelRatio;
-    const y = (statsRect.top - cardRect.top) * pixelRatio;
+    const scaleX = canvas.width / Math.max(cardRect.width, 1);
+    const scaleY = canvas.height / Math.max(cardRect.height, 1);
+    const x = (statsRect.left - cardRect.left) * scaleX;
+    const y = (statsRect.top - cardRect.top) * scaleY;
     ctx.drawImage(
       statsImg,
       x,
       y,
-      statsRect.width * pixelRatio,
-      statsRect.height * pixelRatio,
+      statsRect.width * scaleX,
+      statsRect.height * scaleY,
     );
     return canvasToPng(canvas);
   } finally {
