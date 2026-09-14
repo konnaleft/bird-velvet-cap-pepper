@@ -8,6 +8,7 @@ export type StudioMarket = {
   comments?: string;
   image: string;
   objectPosition: string;
+  imageFit?: "cover" | "contain";
 };
 
 export const MARKETS: StudioMarket[] = [
@@ -31,6 +32,7 @@ export const MARKETS: StudioMarket[] = [
     liquidity: "27.9K",
     image: "/scenes/ufc.jpg",
     objectPosition: "center center",
+    imageFit: "contain",
   },
   {
     id: "milei",

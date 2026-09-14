@@ -64,10 +64,18 @@ export const ShareCard = forwardRef<
         </div>
       </div>
 
-      <div className="share-card__art">
+      <div
+        className={cn(
+          "share-card__art",
+          market.imageFit === "contain" && "share-card__art--logo",
+        )}
+      >
         {market.image ? (
           <img
-            className="share-card__scene"
+            className={cn(
+              "share-card__scene",
+              market.imageFit === "contain" && "share-card__scene--contain",
+            )}
             src={market.image}
             alt=""
             style={{ objectPosition: market.objectPosition }}

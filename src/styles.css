@@ -240,6 +240,10 @@
   overflow: hidden;
 }
 
+.share-card__art--logo {
+  background: #d20b0b;
+}
+
 .share-card__scene {
   position: absolute;
   inset: 0;
@@ -247,6 +251,10 @@
   height: 100%;
   object-fit: cover;
   object-position: center center;
+}
+
+.share-card__scene--contain {
+  object-fit: contain;
 }
 
 .share-card__scrim {

@@ -14,9 +14,17 @@ const LOCAL_SCENES: Array<{ test: RegExp; image: string; position: string }> = [
     image: "/scenes/argentina.jpg",
     position: "center right",
   },
-  { test: /ufc|mcmillen|rahiki/, image: "/scenes/ufc.jpg", position: "center center" },
   { test: /fetterman/, image: "/scenes/fetterman.jpg", position: "center center" },
 ];
+
+const UFC_SCENE = {
+  image: "/scenes/ufc.jpg",
+  position: "center center",
+  imageFit: "contain" as const,
+};
+
+const UFC_RE =
+  /\bufc\b|ultimate fighting|contender series|dana white|mcmillen|rahiki/;
 
 export type ParsedMarketRef = {
   eventSlug?: string;
@@ -130,10 +138,15 @@ function leadingOutcome(market: Record<string, unknown>) {
   };
 }
 
-function sceneFor(slug: string, fallback: string) {
-  const local = LOCAL_SCENES.find((item) => item.test.test(slug));
-  if (local) return local;
-  return { image: fallback, position: "center center" };
+function isUfc(...parts: Array<string | undefined | null>) {
+  return UFC_RE.test(parts.filter(Boolean).join(" ").toLowerCase());
+}
+
+function sceneFor(haystack: string, fallback: string) {
+  if (isUfc(haystack) || /ufc-logo/i.test(fallback)) return UFC_SCENE;
+  const local = LOCAL_SCENES.find((item) => item.test.test(haystack));
+  if (local) return { ...local, imageFit: "cover" as const };
+  return { image: fallback, position: "center center", imageFit: "cover" as const };
 }
 
 function allowedImage(url: string) {
@@ -151,6 +164,32 @@ async function fetchJson(path: string) {
   });
   if (!res.ok) throw new Error(`Gamma ${res.status}`);
   return res.json() as Promise<unknown>;
+}
+
+async function fetchEventBySlug(slug: string) {
+  const exact = await fetchJson(`/events?slug=${encodeURIComponent(slug)}`);
+  const exactHit = Array.isArray(exact) ? asMarket(exact[0]) : asMarket(exact);
+  if (exactHit) return exactHit;
+
+  const queries = [slug, slug.replace(/-/g, " ")];
+  for (const query of queries) {
+    try {
+      const search = await fetchJson(
+        `/public-search?q=${encodeURIComponent(query)}`,
+      );
+      const events = Array.isArray(asMarket(search)?.events)
+        ? (asMarket(search)?.events as unknown[])
+        : [];
+      const hit = events.find((item) => {
+        const value = String(asMarket(item)?.slug || "");
+        return value === slug || value.startsWith(`${slug}-`);
+      });
+      if (hit) return asMarket(hit);
+    } catch {
+      /* try next query */
+    }
+  }
+  return null;
 }
 
 async function toDataUrl(url: string) {
@@ -182,10 +221,7 @@ export async function loadStudioMarket(rawUrl: string): Promise<StudioMarket> {
   }
 
   if (ref.eventSlug) {
-    const list = await fetchJson(
-      `/events?slug=${encodeURIComponent(ref.eventSlug)}`,
-    );
-    const event = Array.isArray(list) ? asMarket(list[0]) : asMarket(list);
+    const event = await fetchEventBySlug(ref.eventSlug);
     if (event) {
       tags = event.tags;
       commentCount = event.commentCount
@@ -203,6 +239,9 @@ export async function loadStudioMarket(rawUrl: string): Promise<StudioMarket> {
         });
         market = asMarket(wanted) ?? asMarket(ranked[0]);
       }
+      if (!String(market?.image || market?.icon || "") && event.image) {
+        market = { ...(market ?? {}), image: event.image, icon: event.icon };
+      }
     }
   }
 
@@ -214,8 +253,12 @@ export async function loadStudioMarket(rawUrl: string): Promise<StudioMarket> {
   }
 
   const slug = String(market.slug || ref.marketSlug || "market");
+  const question = String(market.question || "Untitled market");
   const remoteImage = String(market.image || market.icon || "");
-  const scene = sceneFor(slug, remoteImage);
+  const scene = sceneFor(
+    [rawUrl, ref.eventSlug, ref.marketSlug, slug, question, categoryFromTags(tags)].join(" "),
+    remoteImage,
+  );
   let image = scene.image;
   if (image.startsWith("http")) {
     image = (await toDataUrl(image)) || "";
@@ -224,7 +267,7 @@ export async function loadStudioMarket(rawUrl: string): Promise<StudioMarket> {
   return {
     id: slug,
     category: categoryFromTags(tags),
-    question: String(market.question || "Untitled market"),
+    question,
     leading: leadingOutcome(market),
     volume: formatCompact(
       (market.volumeNum ?? market.volume) as string | number | undefined,
@@ -235,5 +278,6 @@ export async function loadStudioMarket(rawUrl: string): Promise<StudioMarket> {
     comments: commentCount,
     image,
     objectPosition: scene.position,
+    imageFit: scene.imageFit,
   };
 }
