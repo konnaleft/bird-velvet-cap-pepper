@@ -20,7 +20,7 @@ const LOCAL_SCENES: Array<{ test: RegExp; image: string; position: string }> = [
 const UFC_SCENE = {
   image: "/scenes/ufc.jpg",
   position: "center center",
-  imageFit: "contain" as const,
+  imageFit: "cover" as const,
 };
 
 const UFC_RE =

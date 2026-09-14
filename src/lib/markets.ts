@@ -32,7 +32,6 @@ export const MARKETS: StudioMarket[] = [
     liquidity: "27.9K",
     image: "/scenes/ufc.jpg",
     objectPosition: "center center",
-    imageFit: "contain",
   },
   {
     id: "milei",
