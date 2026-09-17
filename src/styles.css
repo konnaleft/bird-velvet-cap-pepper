@@ -252,36 +252,36 @@
   isolation: isolate;
 }
 
-/* Brushed anodized blue metal — CSS only so html-to-image / Satori stay safe */
+/* Exact brushed metal plate from the 62c reference. Hard split, no photo fade. */
 .share-card__metal {
   position: absolute;
-  inset: 0;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 50%;
   z-index: 0;
   pointer-events: none;
-  background:
-    linear-gradient(
-      90deg,
-      rgba(8, 28, 110, 0.28) 0%,
-      rgba(255, 255, 255, 0.08) 36%,
-      rgba(255, 255, 255, 0.22) 48%,
-      rgba(255, 255, 255, 0.06) 60%,
-      rgba(10, 32, 120, 0.3) 100%
-    ),
-    repeating-linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.07) 0px,
-      rgba(255, 255, 255, 0.07) 1px,
-      rgba(255, 255, 255, 0) 2px,
-      rgba(0, 20, 80, 0.08) 3px,
-      rgba(255, 255, 255, 0) 5px
-    ),
-    linear-gradient(
-      180deg,
-      #4a86ff 0%,
-      #2e5cff 38%,
-      #1f4de8 72%,
-      #163fc9 100%
-    );
+  overflow: hidden;
+  background-color: #2e5cff;
+  background-image: url("/share-card-metal.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.share-card:not(.share-card--square) .share-card__metal {
+  width: 56%;
+}
+.share-card--shot:not(.share-card--square) .share-card__metal {
+  width: 640px;
+}
+.share-card--shot.share-card--square .share-card__metal {
+  width: 540px;
+}
+.share-card__metal img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .share-card--square {
@@ -315,16 +315,7 @@
 }
 
 .share-card__scrim {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: linear-gradient(
-    90deg,
-    #2e5cff 0%,
-    rgba(46, 92, 255, 0.42) 16%,
-    rgba(46, 92, 255, 0.12) 34%,
-    transparent 52%
-  );
+  display: none;
 }
 
 .share-card__content {
