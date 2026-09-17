@@ -23,6 +23,7 @@ export const ShareCard = forwardRef<
         shot && "share-card--shot",
       )}
     >
+      <div className="share-card__metal" aria-hidden="true" />
       <div className="share-card__content">
         <div className="share-card__topline">
           <span className="share-card__brand">Polymarket Trend</span>
