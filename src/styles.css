@@ -8,6 +8,7 @@
   --color-primary: #67e8f9;
   --color-border: #243044;
   --color-navy: #081228;
+  --color-card-blue: #2e5cff;
   --font-sans: "Segoe UI", system-ui, -apple-system, sans-serif;
   --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   --radius: 0.75rem;
@@ -246,9 +247,41 @@
   aspect-ratio: 1200 / 630;
   width: 100%;
   border-radius: 1.25rem;
-  background: var(--color-navy);
-  color: var(--color-fg);
+  background: var(--color-card-blue);
+  color: #fff;
   isolation: isolate;
+}
+
+/* Brushed anodized blue metal — CSS only so html-to-image / Satori stay safe */
+.share-card__metal {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(8, 28, 110, 0.28) 0%,
+      rgba(255, 255, 255, 0.08) 36%,
+      rgba(255, 255, 255, 0.22) 48%,
+      rgba(255, 255, 255, 0.06) 60%,
+      rgba(10, 32, 120, 0.3) 100%
+    ),
+    repeating-linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.07) 0px,
+      rgba(255, 255, 255, 0.07) 1px,
+      rgba(255, 255, 255, 0) 2px,
+      rgba(0, 20, 80, 0.08) 3px,
+      rgba(255, 255, 255, 0) 5px
+    ),
+    linear-gradient(
+      180deg,
+      #4a86ff 0%,
+      #2e5cff 38%,
+      #1f4de8 72%,
+      #163fc9 100%
+    );
 }
 
 .share-card--square {
@@ -258,6 +291,7 @@
 
 .share-card__art {
   position: relative;
+  z-index: 1;
   min-width: 0;
   min-height: 0;
   overflow: hidden;
@@ -286,16 +320,17 @@
   pointer-events: none;
   background: linear-gradient(
     90deg,
-    #081228 0%,
-    rgba(8, 18, 40, 0.28) 12%,
-    rgba(8, 18, 40, 0.06) 28%,
-    transparent 48%
+    #2e5cff 0%,
+    rgba(46, 92, 255, 0.42) 16%,
+    rgba(46, 92, 255, 0.12) 34%,
+    transparent 52%
   );
 }
 
 .share-card__content {
   position: relative;
   z-index: 2;
+  text-shadow: 0 1px 10px rgba(8, 28, 110, 0.35);
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -347,6 +382,7 @@
   font-weight: 700;
   letter-spacing: -0.038em;
   line-height: 1.12;
+  text-shadow: 0 2px 14px rgba(8, 28, 110, 0.45);
   overflow: hidden;
   overflow-wrap: anywhere;
   word-break: break-word;
@@ -423,7 +459,7 @@
   display: block;
   height: 100%;
   border-radius: inherit;
-  background: var(--color-primary);
+  background: linear-gradient(90deg, #67e8f9 0%, #4aa7ff 55%, #7b6bff 100%);
 }
 
 .share-card__stats {
@@ -442,9 +478,9 @@
   margin-right: 0;
   margin-bottom: 0;
   padding: 0.7rem 0.95rem;
-  border: 1px solid rgba(243, 245, 248, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.28);
   border-radius: 0.75rem;
-  background: rgba(8, 18, 40, 0.55);
+  background: rgba(12, 40, 140, 0.22);
 }
 
 .share-card__stat {
@@ -459,7 +495,7 @@
   font-size: 0.65rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--color-muted);
+  color: rgba(243, 245, 248, 0.78);
   white-space: nowrap;
 }
 
