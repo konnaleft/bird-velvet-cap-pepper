@@ -252,7 +252,7 @@
   isolation: isolate;
 }
 
-/* Exact brushed metal plate from the 62c reference. Hard split, no photo fade. */
+/* Brushed metal plate matching the 62c reference. Hard split, no photo fade. */
 .share-card__metal {
   position: absolute;
   left: 0;
@@ -262,11 +262,24 @@
   z-index: 0;
   pointer-events: none;
   overflow: hidden;
-  background-color: #2e5cff;
-  background-image: url("/share-card-metal.jpg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  background-color: #1c4ae0;
+  background-image:
+    repeating-linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.2) 0px,
+      rgba(255, 255, 255, 0.05) 1px,
+      rgba(8, 28, 110, 0.18) 2px,
+      transparent 3px
+    ),
+    linear-gradient(
+      90deg,
+      #102ea8 0%,
+      #1c4de0 16%,
+      #3d7aff 40%,
+      #8ec2ff 50%,
+      #2e5cff 58%,
+      #1639c2 100%
+    );
 }
 .share-card:not(.share-card--square) .share-card__metal {
   width: 56%;
@@ -276,12 +289,6 @@
 }
 .share-card--shot.share-card--square .share-card__metal {
   width: 540px;
-}
-.share-card__metal img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
 }
 
 .share-card--square {
